@@ -914,6 +914,29 @@ impl EdwardsPoint {
     ) -> EdwardsPoint {
         crate::backend::vartime_double_base_mul(a, A, b)
     }
+
+    /// Compute \\(aA + bB\\) in variable time, where \\(B\\) is the Ed25519 basepoint.
+    pub fn kobold_vartime_double_scalar_mul_basepoint<F: Fn(usize, [u64; 15]) -> ()>(
+        a: &Scalar,
+        A: &EdwardsPoint,
+        b: &Scalar,
+        msgFun: &dyn Fn(&str) -> (),
+        logFun: &dyn Fn() -> (),
+        update_kobold_account_handle: F,
+        i: usize,
+        projective_point: [u64; 15],
+    ) -> (EdwardsPoint, u8) {
+        crate::backend::kobold_vartime_double_base_mul(
+            a,
+            A,
+            b,
+            msgFun,
+            logFun,
+            update_kobold_account_handle,
+            i,
+            projective_point,
+        )
+    }
 }
 
 #[cfg(feature = "precomputed-tables")]

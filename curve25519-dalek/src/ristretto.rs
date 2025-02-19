@@ -1073,6 +1073,34 @@ impl RistrettoPoint {
             a, &A.0, b,
         ))
     }
+
+     /// Compute \\(aA + bB\\) in variable time, where \\(B\\) is the
+    /// Ristretto basepoint.
+    pub fn kobold_vartime_double_scalar_mul_basepoint<F: Fn(usize, [u64; 15]) -> ()>(
+        a: &Scalar,
+        A: &RistrettoPoint,
+        b: &Scalar,
+        msgFun: &dyn Fn(&str) -> (),
+        logFun: &dyn Fn() -> (),
+        update_kobold_account_handle: F,
+        i: usize,
+        projective_point: [u64; 15],
+    ) -> (RistrettoPoint, u8) {
+        let (edPoint, res) = EdwardsPoint::kobold_vartime_double_scalar_mul_basepoint(
+            a,
+            &A.0,
+            b,
+            msgFun,
+            logFun,
+            update_kobold_account_handle,
+            i,
+            projective_point,
+        );
+        (RistrettoPoint(edPoint), res)
+        // RistrettoPoint(EdwardsPoint::vartime_double_scalar_mul_basepoint(
+        //     a, &A.0, b,
+        // ))
+    }
 }
 
 /// A precomputed table of multiples of a basepoint, used to accelerate
