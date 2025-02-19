@@ -282,8 +282,6 @@ pub fn kobold_vartime_double_base_mul<F: Fn(usize, [u64; 15]) -> ()>(
     a: &Scalar,
     A: &EdwardsPoint,
     b: &Scalar,
-    msgFun: &dyn Fn(&str) -> (),
-    logFun: &dyn Fn() -> (),
     update_kobold_account_handle: F,
     i: usize,
     projective_point: [u64; 15],
@@ -291,7 +289,6 @@ pub fn kobold_vartime_double_base_mul<F: Fn(usize, [u64; 15]) -> ()>(
     match get_selected_backend() {
         #[cfg(curve25519_dalek_backend = "simd")]
         BackendKind::Avx2 => {
-            msgFun("Match branch 1");
             (
                 vector::scalar_mul::vartime_double_base::spec_avx2::mul(a, A, b),
                 0u8,
@@ -302,13 +299,10 @@ pub fn kobold_vartime_double_base_mul<F: Fn(usize, [u64; 15]) -> ()>(
             vector::scalar_mul::vartime_double_base::spec_avx512ifma_avx512vl::mul(a, A, b)
         }
         BackendKind::Serial => {
-            msgFun("Match branch 2");
             serial::scalar_mul::vartime_double_base::kobold_mul(
                 a,
                 A,
                 b,
-                msgFun,
-                logFun,
                 update_kobold_account_handle,
                 i,
                 projective_point,

@@ -99,14 +99,10 @@ pub fn kobold_mul<F: Fn(usize, [u64; 15]) -> ()>(
     a: &Scalar,
     A: &EdwardsPoint,
     b: &Scalar,
-    msgFun: &dyn Fn(&str) -> (),
-    logFun: &dyn Fn() -> (),
     update_kobold_account_handle: F,
     i_bu: usize,
     projective_point_bu: [u64; 15],
 ) -> (EdwardsPoint, u8) {
-    msgFun("\nvartime_double_base.mul #1: entered function");
-    logFun();
     let a_naf = a.non_adjacent_form(5);
 
     #[cfg(feature = "precomputed-tables")]
@@ -114,16 +110,9 @@ pub fn kobold_mul<F: Fn(usize, [u64; 15]) -> ()>(
     #[cfg(not(feature = "precomputed-tables"))]
     let b_naf = b.non_adjacent_form(5);
 
-    msgFun(&format!(
-        "vartime_double_base.mul #2: computed non_adjacent_forms: {:?}, {:?}",
-        a_naf, b_naf
-    ));
-    logFun();
-
     let mut i: usize = 255;
     let mut r;
     if i_bu == 300 {
-        msgFun("Got i_bu = 300, on to finding starting index");
         // Find starting index
         for j in (0..256).rev() {
             i = j;
@@ -131,13 +120,10 @@ pub fn kobold_mul<F: Fn(usize, [u64; 15]) -> ()>(
                 break;
             }
         }
-        msgFun(&format!("Found starting index: {}", i));
         r = ProjectivePoint::identity();
     } else {
         i = i_bu;
         r = deserialize_r_from_backup(projective_point_bu);
-        msgFun(&format!("Successfully loaded i: {}", i));
-        msgFun(&format!("Successfully loaded R: {:?}", r));
     }
 
     let table_A = NafLookupTable5::<ProjectiveNielsPoint>::from(A);
@@ -181,18 +167,10 @@ pub fn kobold_mul<F: Fn(usize, [u64; 15]) -> ()>(
     } else {
         // save progress
         let x_arr = r.X.0;
-        msgFun(&format!("x_arr: {:?}", x_arr));
         let y_arr = r.Y.0;
-        msgFun(&format!("y_arr: {:?}", y_arr));
         let z_arr = r.Z.0;
-        msgFun(&format!("z_arr: {:?}", z_arr));
         let concatenated = [x_arr, y_arr, z_arr].concat();
         let projective_point_progress: [u64; 15] = concatenated.try_into().unwrap(); // TODO: verify correctness of this
-        msgFun(&format!(
-            "Will persist projective_point_progress: {:?}",
-            projective_point_progress
-        ));
-        msgFun(&projective_point_progress.len().to_string());
         update_kobold_account_handle(i, projective_point_progress);
         return (EdwardsPoint::default(), 1);
     }
