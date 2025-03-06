@@ -154,7 +154,7 @@ pub fn kobold_mul<F: Fn(usize, [u64; 15]) -> ()>(
         if i == 0 {
             break;
         }
-        if j == 50 {
+        if j == 30 {
             i -= 1;
             break;
         }
