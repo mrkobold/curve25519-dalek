@@ -162,7 +162,8 @@ pub fn kobold_mul<F: Fn(usize, [u64; 15]) -> ()>(
         j += 1;
     }
 
-    if i == 0 {
+    // i == 0 and the algo already performed the repetition for i = 0
+    if i == 0 && j < 30 {
         return (r.as_extended(), 2);
     } else {
         // save progress
