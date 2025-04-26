@@ -12,7 +12,6 @@
 
 use core::cmp::Ordering;
 extern crate std;
-use std::string::ToString;
 
 use crate::backend::serial::curve_models::{ProjectiveNielsPoint, ProjectivePoint};
 use crate::backend::serial::u64::field::FieldElement51;
