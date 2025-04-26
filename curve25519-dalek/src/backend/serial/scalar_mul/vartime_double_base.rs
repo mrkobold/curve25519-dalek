@@ -135,37 +135,45 @@ pub fn step_mul<F: Fn(usize, [u64; 15]) -> ()>(
     let mut j = 0;
     let mut loop_i = i as i64;
 
-    while loop_i >= 0 && j < 30 {
+    loop {
         let mut t = r.double();
+
         match a_naf[i].cmp(&0) {
             Ordering::Greater => t = &t.as_extended() + &table_A.select(a_naf[i] as usize),
             Ordering::Less => t = &t.as_extended() - &table_A.select(-a_naf[i] as usize),
             Ordering::Equal => {}
         }
+
         match b_naf[i].cmp(&0) {
             Ordering::Greater => t = &t.as_extended() + &table_B.select(b_naf[i] as usize),
             Ordering::Less => t = &t.as_extended() - &table_B.select(-b_naf[i] as usize),
             Ordering::Equal => {}
         }
+
         r = t.as_projective();
 
-        loop_i -= 1;
+        if i == 0 {
+            break;
+        }
+        if j == 30 {
+            i -= 1;
+            break;
+        }
+        i -= 1;
         j += 1;
     }
 
-    if loop_i < 0 {
+    // i == 0 and the algo already performed the repetition for i = 0
+    if i == 0 && j < 30 {
         return (r.as_extended(), 2);
+    } else {
+        // save progress
+        let x_arr = r.X.0;
+        let y_arr = r.Y.0;
+        let z_arr = r.Z.0;
+        let concatenated = [x_arr, y_arr, z_arr].concat();
+        let projective_point_progress: [u64; 15] = concatenated.try_into().unwrap(); // TODO: verify correctness of this
+        update_kobold_account_handle(i, projective_point_progress);
+        return (EdwardsPoint::default(), 1);
     }
-
-    // save progress
-    let x_arr = r.X.0;
-    let y_arr = r.Y.0;
-    let z_arr = r.Z.0;
-    let concatenated = [x_arr, y_arr, z_arr].concat();
-    let projective_point_progress: [u64; 15] = concatenated.try_into().unwrap();
-
-    i = loop_i as usize;
-
-    update_kobold_account_handle(i, projective_point_progress);
-    return (EdwardsPoint::default(), 1);
 }
