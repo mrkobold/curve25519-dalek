@@ -278,7 +278,7 @@ pub fn vartime_double_base_mul(a: &Scalar, A: &EdwardsPoint, b: &Scalar) -> Edwa
 
 /// Compute \\(aA + bB\\) in variable time, where \\(B\\) is the Ed25519 basepoint.
 #[allow(non_snake_case)]
-pub fn kobold_vartime_double_base_mul<F: Fn(usize, [u64; 15]) -> ()>(
+pub fn step_vartime_double_base_mul<F: Fn(usize, [u64; 15]) -> ()>(
     a: &Scalar,
     A: &EdwardsPoint,
     b: &Scalar,
@@ -299,7 +299,7 @@ pub fn kobold_vartime_double_base_mul<F: Fn(usize, [u64; 15]) -> ()>(
             vector::scalar_mul::vartime_double_base::spec_avx512ifma_avx512vl::mul(a, A, b)
         }
         BackendKind::Serial => {
-            serial::scalar_mul::vartime_double_base::kobold_mul(
+            serial::scalar_mul::vartime_double_base::step_mul(
                 a,
                 A,
                 b,

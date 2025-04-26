@@ -95,7 +95,7 @@ pub fn deserialize_r_from_backup(projective_point_bu: [u64; 15]) -> ProjectivePo
 }
 
 /// Compute \\(aA + bB\\) in variable time, where \\(B\\) is the Ed25519 basepoint.
-pub fn kobold_mul<F: Fn(usize, [u64; 15]) -> ()>(
+pub fn step_mul<F: Fn(usize, [u64; 15]) -> ()>(
     a: &Scalar,
     A: &EdwardsPoint,
     b: &Scalar,

@@ -1074,9 +1074,9 @@ impl RistrettoPoint {
         ))
     }
 
-     /// Compute \\(aA + bB\\) in variable time, where \\(B\\) is the
+    /// Compute \\(aA + bB\\) in variable time, where \\(B\\) is the
     /// Ristretto basepoint.
-    pub fn kobold_vartime_double_scalar_mul_basepoint<F: Fn(usize, [u64; 15]) -> ()>(
+    pub fn step_vartime_double_scalar_mul_basepoint<F: Fn(usize, [u64; 15]) -> ()>(
         a: &Scalar,
         A: &RistrettoPoint,
         b: &Scalar,
@@ -1084,7 +1084,7 @@ impl RistrettoPoint {
         i: usize,
         projective_point: [u64; 15],
     ) -> (RistrettoPoint, u8) {
-        let (edPoint, res) = EdwardsPoint::kobold_vartime_double_scalar_mul_basepoint(
+        let (edPoint, res) = EdwardsPoint::step_vartime_double_scalar_mul_basepoint(
             a,
             &A.0,
             b,
@@ -1093,9 +1093,6 @@ impl RistrettoPoint {
             projective_point,
         );
         (RistrettoPoint(edPoint), res)
-        // RistrettoPoint(EdwardsPoint::vartime_double_scalar_mul_basepoint(
-        //     a, &A.0, b,
-        // ))
     }
 }
 

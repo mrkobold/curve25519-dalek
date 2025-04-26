@@ -916,7 +916,7 @@ impl EdwardsPoint {
     }
 
     /// Compute \\(aA + bB\\) in variable time, where \\(B\\) is the Ed25519 basepoint.
-    pub fn kobold_vartime_double_scalar_mul_basepoint<F: Fn(usize, [u64; 15]) -> ()>(
+    pub fn step_vartime_double_scalar_mul_basepoint<F: Fn(usize, [u64; 15]) -> ()>(
         a: &Scalar,
         A: &EdwardsPoint,
         b: &Scalar,
@@ -924,7 +924,7 @@ impl EdwardsPoint {
         i: usize,
         projective_point: [u64; 15],
     ) -> (EdwardsPoint, u8) {
-        crate::backend::kobold_vartime_double_base_mul(
+        crate::backend::step_vartime_double_base_mul(
             a,
             A,
             b,
