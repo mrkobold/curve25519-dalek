@@ -920,7 +920,7 @@ impl EdwardsPoint {
         a: &Scalar,
         A: &EdwardsPoint,
         b: &Scalar,
-        update_kobold_account_handle: F,
+        progress_saving_handle: F,
         i: usize,
         projective_point: [u64; 15],
     ) -> (EdwardsPoint, u8) {
@@ -928,7 +928,7 @@ impl EdwardsPoint {
             a,
             A,
             b,
-            update_kobold_account_handle,
+            progress_saving_handle,
             i,
             projective_point,
         )

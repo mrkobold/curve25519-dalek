@@ -282,7 +282,7 @@ pub fn step_vartime_double_base_mul<F: Fn(usize, [u64; 15]) -> ()>(
     a: &Scalar,
     A: &EdwardsPoint,
     b: &Scalar,
-    update_kobold_account_handle: F,
+    progress_saving_handle: F,
     i: usize,
     projective_point: [u64; 15],
 ) -> (EdwardsPoint, u8) {
@@ -303,7 +303,7 @@ pub fn step_vartime_double_base_mul<F: Fn(usize, [u64; 15]) -> ()>(
                 a,
                 A,
                 b,
-                update_kobold_account_handle,
+                progress_saving_handle,
                 i,
                 projective_point,
             )

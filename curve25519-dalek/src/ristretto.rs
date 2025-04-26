@@ -1080,7 +1080,7 @@ impl RistrettoPoint {
         a: &Scalar,
         A: &RistrettoPoint,
         b: &Scalar,
-        update_kobold_account_handle: F,
+        progress_saving_handle: F,
         i: usize,
         projective_point: [u64; 15],
     ) -> (RistrettoPoint, u8) {
@@ -1088,7 +1088,7 @@ impl RistrettoPoint {
             a,
             &A.0,
             b,
-            update_kobold_account_handle,
+            progress_saving_handle,
             i,
             projective_point,
         );
